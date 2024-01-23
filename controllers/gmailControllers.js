@@ -2,9 +2,8 @@ const { google } = require('googleapis');
 const gmailConfig = require('../config/gmailConfig');
 const { readTokens, writeTokens, TOKEN_PATH } = require('../tokens');
 // const {checkIfReplied} = require('../utils/ifReplied');
-const { cloudchannel } = require('googleapis/build/src/apis/cloudchannel');
+// const { cloudchannel } = require('googleapis/build/src/apis/cloudchannel');
 
-// const repliedUsers = new Set();
 
 async function checkAndRespondToEmails(gmail) {
   try {
@@ -105,54 +104,6 @@ async function checkAndRespondToEmails(gmail) {
             continue;
           }
 
-        // const threadId = thread.data.id
-
-        // if (repliedUsers.has(thread)) {
-        //     console.log("Already replied to : ", From);
-        //     continue;
-        //   }
-
-        ///   making changes to reply logic
-
-        // const replies = thread.data.messages.slice(1);
-        // console.log("REPLY:  ", replies);
-
-        // if(replies.length === 0){
-        //     const replyRaw = await createReplyRaw(toEmail, From, subject);
-        //     const sentReply = await gmail.users.messages.send({
-        //         userId: 'me',
-        //         requestBody: {
-        //           raw: replyRaw,
-        //         },
-        //       });
-
-    
-
-        //     const labelName = "onVacation";
-        //     await gmail.users.messages.modify({
-        //         userId: 'me',
-        //         id: sentReply.data.id, // Use the ID of the sent reply, not the original message
-        //         requestBody: {
-        //           addLabelIds: [await createLabelIfNeeded(labelName, gmail)],
-        //         },
-        //       });
-         
-
-        //       console.log("Sent reply to email:", From);
-        //   //Add the user to replied users set
-              
-        // }
-
-        
-
-         ///   making changes to reply logic
-
-        // repliedUsers.add(thread);
-        // to comment 
-
-        // // console.log('New Email from:', senderEmail);
-
-//comm
       } catch (error) {
         console.error('Error fetching email details:', error.message);
       }
@@ -176,9 +127,7 @@ async function createReplyRaw(from, to, subject, threadId, messageIds) {
   
 
 async function createLabelIfNeeded(labelName, gmail) {
-    // const gmail = google.gmail({ version: "v1", auth: oAuth2Client });
-    // Check if the label already exists.
-    
+     
     try {
         const res = await gmail.users.labels.list({ userId: "me" });
         const labels = res.data.labels;

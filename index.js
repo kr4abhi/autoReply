@@ -2,7 +2,8 @@
 const express = require('express');
 const { google } = require('googleapis');
 const gmailConfig = require('./config/gmailConfig');
-const gmailRouter = require('./routes/gmailRouter')
+const gmailRouter = require('./routes/gmailRouter');
+const gmailController = require('./controllers/gmailControllers');
 const { writeTokens, TOKEN_PATH } = require('./tokens');  // Import writeTokens and TOKEN_PATH
 
 
@@ -36,15 +37,17 @@ app.get('/auth/google/callback', async (req, res) => {
     const { tokens } = await oAuth2Client.getToken(code);
     oAuth2Client.setCredentials(tokens);
 
-    await writeTokens(tokens);
-
-    
-    
-
+    await writeTokens(tokens); 
     console.log('Successfully authenticated!');
     console.log('Access Token:', tokens.access_token);
     console.log('Refresh Token:', tokens.refresh_token);
-    res.send('Authentication successful!');
+
+    //  
+    //
+    res.json({
+      message: 'Authentication successful!',
+      redirectUrl: '/gmail',
+    });
   } catch (error) {
     console.error('Error during authentication:', error.message);
     res.status(500).send('Authentication failed.');

@@ -6,8 +6,10 @@ const { readTokens, writeTokens, TOKEN_PATH } = require('../tokens');
 const gmailController = require("../controllers/gmailControllers");
 
 const router = express.Router();
+let isInitialCheckDone = false;
 
-router.get('/check-emails', async (req, res) => {
+
+router.get('/', async (req, res) => {
 
 try {
   // Load saved tokens
@@ -32,7 +34,18 @@ try {
 
   await gmailController.checkAndRespondToEmails(gmail, oAuth2Client);
 
-   // Save the updated tokens after refreshing
+  if (!isInitialCheckDone) {
+    await gmailController.checkAndRespondToEmails(gmail, oAuth2Client);
+    isInitialCheckDone = true;
+  }
+
+  // Set up a recurring interval for email checking with a random delay
+  const randomInterval = () => Math.floor(Math.random() * (120000 - 45000 + 1) + 45000); // Random between 45s and 120s
+
+  setInterval(async () => {
+    await gmailController.checkAndRespondToEmails(gmail, oAuth2Client);
+  }, randomInterval());
+
    await writeTokens(oAuth2Client.credentials);
 
 
